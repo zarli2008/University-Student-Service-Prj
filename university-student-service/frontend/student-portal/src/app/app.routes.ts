@@ -1,9 +1,15 @@
 import { Routes } from '@angular/router';
-import { CourseComponent } from './course/course.component'; // must be standalone too
-import { AppComponent } from './app.component';
+import { EnrolmentInfoComponent } from './components/enrolment-info/enrolment-info.component';
+import { StudentInfoComponent } from './components/student-info/student-info.component';
+import { HomeComponent } from './components/home/home.component';
+import { StudentDocumentsComponent } from './components/student-documents/student-documents.component';
+import { CourseInfoComponent } from './components/course-info/course-info.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/course', pathMatch: 'full' },
-    { path: 'course', component: CourseComponent }
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'student-info', component: StudentInfoComponent },
+  { path: 'enrolment-info', component: EnrolmentInfoComponent },
+  { path: 'student-documents', component: StudentDocumentsComponent },
+  { path: 'course-info', component: CourseInfoComponent }
 ];
-
