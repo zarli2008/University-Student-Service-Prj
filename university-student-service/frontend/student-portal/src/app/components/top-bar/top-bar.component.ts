@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { User } from '../../model/interface/user';
 
 @Component({
   selector: 'app-top-bar',
@@ -7,6 +9,9 @@ import { Component } from '@angular/core';
   styleUrl: './top-bar.component.scss',
 })
 export class TopBarComponent {
-  userImageUrl = 'assets/profile.jpg'; // Replace with real user image
-  userEmail = 'user@example.com'; // Replace with dynamic email
+  user: User;
+
+  constructor(private userService: UserService) {
+    this.user = this.userService.getUser();
+  }
 }
