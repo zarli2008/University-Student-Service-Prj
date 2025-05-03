@@ -7,13 +7,12 @@ import {
   signal,
 } from '@angular/core';
 import { HomeComponent } from './components/home/home.component';
-import { LeftSidebarComponent } from './components/left-sidebar/left-sidebar.component';
+import { LayoutComponent } from './components/layout/layout.component';
 import { isPlatformBrowser } from '@angular/common';
-import { TopBarComponent } from './components/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [HomeComponent, LeftSidebarComponent, TopBarComponent],
+  imports: [HomeComponent, LayoutComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

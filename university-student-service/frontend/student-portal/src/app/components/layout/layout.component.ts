@@ -1,61 +1,56 @@
-import {
-  Component,
-  computed,
-  HostListener,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-  signal,
-} from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { LeftSidebarComponent } from '../left-sidebar/left-sidebar.component';
-import { TopBarComponent } from '../top-bar/top-bar.component';
-import { HomeComponent } from '../home/home.component';
+import { CommonModule } from '@angular/common';
+import { Component, input, output } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { User } from '../../model/interface/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-layout',
-  imports: [HomeComponent, LeftSidebarComponent, TopBarComponent],
+  imports: [RouterModule, CommonModule],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })
-export class LayoutComponent implements OnInit {
-  title = 'student-portal';
-  isLeftSidebarCollapsed = signal<boolean>(false);
-  screenWidth = signal<number>(0);
+export class LayoutComponent {
+  user: User;
+  isLeftSidebarCollapsed = input.required<boolean>();
+  changeIsLeftSidebarCollapsed = output<boolean>();
+  items = [
+    {
+      routeLink: 'home',
+      icon: 'fas fa-home',
+      label: 'Home',
+    },
+    {
+      routeLink: 'student-info',
+      icon: 'fas fa-chalkboard-user',
+      label: 'Student Information',
+    },
+    {
+      routeLink: 'enrolment-info',
+      icon: 'fas fa-chalkboard',
+      label: 'Class Enrolments',
+    },
+    {
+      routeLink: 'student-documents',
+      icon: 'fas fa-book-open-reader',
+      label: 'Student Documents',
+    },
+    {
+      routeLink: 'course-info',
+      icon: 'fas fa-book-open',
+      label: 'Course Information',
+    },
+  ];
 
-  sizeClass = computed(() => {
-    const collapsed = this.isLeftSidebarCollapsed();
-    const width = this.screenWidth();
-
-    if (collapsed === undefined || width === undefined) {
-      return '';
-    }
-
-    return collapsed ? '' : width > 768 ? 'body-trimmed' : 'body-md-screen';
-  });
-
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
-
-  @HostListener('window:resize')
-  onResize() {
-    const width = window.innerWidth;
-    this.screenWidth.set(width);
-
-    if (width < 768) {
-      this.isLeftSidebarCollapsed.set(true); // Collapse on small screens
-    } else {
-      this.isLeftSidebarCollapsed.set(false); // Expand on larger screens
-    }
+  toggleCollapse(): void {
+    this.changeIsLeftSidebarCollapsed.emit(!this.isLeftSidebarCollapsed());
   }
 
-  ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.screenWidth.set(window.innerWidth);
-      this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
-    }
+  closeSidenav(): void {
+    this.changeIsLeftSidebarCollapsed.emit(true);
   }
 
-  changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
-    this.isLeftSidebarCollapsed.set(isLeftSidebarCollapsed);
+  constructor(private userService: UserService) {
+    this.user = this.userService.getUser();
   }
 }
