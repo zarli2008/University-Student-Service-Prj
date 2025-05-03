@@ -6,13 +6,13 @@ import {
   PLATFORM_ID,
   signal,
 } from '@angular/core';
-import { HomeComponent } from './components/home/home.component';
+import { MasterComponent } from './components/master/master.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [HomeComponent, LayoutComponent],
+  imports: [MasterComponent, LayoutComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
