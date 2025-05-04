@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StudentContactComponent } from './student-contact/student-contact.component';
+import { StudentEducationComponent } from './student-education/student-education.component';
 import { StudentService } from '../../services/student.service';
 import { Student } from '../../model/interface/student.interface';
 
@@ -12,7 +13,8 @@ import { Student } from '../../model/interface/student.interface';
   imports: [
     FormsModule,
     CommonModule,
-    StudentContactComponent
+    StudentContactComponent,
+    StudentEducationComponent
   ],
   templateUrl: './student-info.component.html',
   styleUrl: './student-info.component.scss'
