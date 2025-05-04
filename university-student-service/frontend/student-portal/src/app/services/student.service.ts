@@ -7,10 +7,10 @@ import { Student } from '../model/interface/student.interface';
 })
 export class StudentService {
   private studentData = new BehaviorSubject<Student>({
-    name: 'testerstest',
-    email: 'test@email.com',
-    about: '',
-    address: '',
+    name: 'Khin',
+    email: 'Ms.',
+    about: 'Le Le',
+    address: 'Female',
     profileImage: null,
 
     permanentAddress: {
