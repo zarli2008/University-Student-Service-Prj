@@ -1,1 +1,33 @@
-<p>course-info works!</p>
+
+<h2>Qualifications</h2>
+
+<div *ngFor="let degree of qualifications" style="margin-bottom: 1rem;">
+  <!-- Clickable Code (acts like toggle button or link) -->
+  <a (click)="toggle(degree.description)" style="cursor: pointer; font-weight: bold; color: #007bff;">
+    {{ expandedCourse === degree.description ? '▼' : '▶' }} {{ degree.description }}
+  </a>
+
+  <!-- Toggle Detail -->
+  <div *ngIf="expandedCourse === degree.description" style="padding: 0.75rem; border-left: 3px solid #007bff; margin-top: 0.5rem; background-color: #f9f9f9;">
+    <div><strong>Code:</strong> {{ degree.code }}</div>
+    <div><strong>Points:</strong> {{ degree.points }}</div>
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let header of tableHeaders">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of degree.courses">
+          <td>
+            <a [href]="" target="_blank">
+              {{ course.code }}
+            </a>
+          </td>
+          <td>{{ course.description }}</td>
+          <td>{{ course.points }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

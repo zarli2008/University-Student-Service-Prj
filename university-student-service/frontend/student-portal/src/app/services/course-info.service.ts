@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { iCourseInfo } from '../model/interface/courseinfo';
+import { iCourseInfo, iQualificationInfo } from '../model/interface/courseinfo';
 import { HttpClient } from '@angular/common/http';
 import { COURSE_API_URL } from '../constant/Constant';
 
@@ -11,8 +11,8 @@ import { COURSE_API_URL } from '../constant/Constant';
 export class CourseInfoService {
 
   constructor(private http: HttpClient) {}
-  getCourseInfo() {
-    return this.http.get<iCourseInfo[]>(COURSE_API_URL);
+  getQualificationInfo() {
+    return this.http.get<iQualificationInfo[]>(COURSE_API_URL);
     //return this.enrolments 
   }
 }

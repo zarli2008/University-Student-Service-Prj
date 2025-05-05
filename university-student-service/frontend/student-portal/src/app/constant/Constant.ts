@@ -9,3 +9,11 @@ export const ENROLMENT_TABLE_HEADERS = [
   'Stream',
   'Efts',
 ];
+
+export const COURSE_INFO_TABLE_HEADERS = [
+  'Code',
+  'Description',
+  'Points'
+];
+
+export const COURSE_API_URL : string = 'https://localhost:44313/api/Course';
