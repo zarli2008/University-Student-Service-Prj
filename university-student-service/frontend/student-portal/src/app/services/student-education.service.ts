@@ -20,4 +20,20 @@ export class StudentEducationService {
   clearRecords() {
     localStorage.removeItem(this.storageKey);
   }
+
+  private records: EducationRecord[] = [];
+
+  getStudentEducationRecords(): EducationRecord[] {
+    return this.records;
+  }
+
+  addRecord(record: EducationRecord) {
+    this.records.push(record);
+  }
+
+  removeRecord(index: number) {
+    this.records.splice(index, 1);
+  }
+
+  
 }

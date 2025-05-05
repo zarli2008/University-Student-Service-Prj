@@ -1,8 +1,14 @@
+import { EducationRecord  } from './education.interface';
+
 export interface Student {
     name: string;
     email: string;
     about: string;
     address: string;
+    fullname: string;
+    passport: string;
+    country: string;
+    dateofbirth: string;
     profileImage: string | ArrayBuffer | null;
   
     permanentAddress: {
@@ -32,5 +38,8 @@ export interface Student {
       name: string;
       relationship: string;
     };
+
+    tertiaryRecords: EducationRecord[];
+
   }
   
