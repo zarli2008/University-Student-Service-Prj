@@ -1,10 +1,10 @@
 import { EducationRecord  } from './education.interface';
 
 export interface Student {
-    name: string;
-    email: string;
-    about: string;
-    address: string;
+    title: string;
+    pfname: string;
+    plname: string;
+    gender: string;
     fullname: string;
     passport: string;
     country: string;

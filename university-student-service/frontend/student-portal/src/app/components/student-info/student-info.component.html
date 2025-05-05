@@ -18,25 +18,28 @@
       <h2 class="text-xl font-semibold mb-4">Name and Title</h2>
       <form (ngSubmit)="submitForm()" class="space-y-6">
 
-        <!-- Email -->
+        <!-- Title -->
         <div class="relative z-0 w-full group">
-          <input type="email" name="email" [(ngModel)]="student.email" required
-                class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" " />
-          <label for="email"
-                class="absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
-                        peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
-                        peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-blue-600">
+          <select [(ngModel)]="student.title"
+                  class="block py-2.5 px-0 w-full border-0 border-b-2 border-gray-300 focus:border-blue-600 peer">
+            <option>Ms</option>
+            <option>Miss</option>
+            <option>Mrs</option>
+            <option>Mr</option>
+          </select>
+          <label 
+              class="absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
+              peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
+                peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-green-600">
             Title *
           </label>
         </div>
-
-        <!-- Full Name -->
+        <!-- First Name -->
         <div class="relative z-0 w-full group">
-          <input type="text" name="name" [(ngModel)]="student.name" required
+          <input type="text" name="name" [(ngModel)]="student.pfname" required
                 class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-green-600 peer"
                 placeholder=" " />
-          <label for="name"
+          <label for="firstname"
                 class="absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
                         peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
                         peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-green-600">
@@ -44,9 +47,9 @@
           </label>
         </div>
 
-        <!-- About Me -->
+        <!-- Last name -->
         <div class="relative z-0 w-full group">
-          <input type="text" name="about" [(ngModel)]="student.about" required
+          <input type="text" name="about" [(ngModel)]="student.plname" required
                 class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-green-600 peer"
                 placeholder=" " />
           <label for="lastname"
@@ -57,15 +60,18 @@
           </label>
         </div>
 
-        <!-- Address -->
+        <!-- Gender -->
         <div class="relative z-0 w-full group">
-          <input type="text" name="address" [(ngModel)]="student.address"
-                class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-green-600 peer"
-                placeholder=" " />
-          <label for="address"
-                class="absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
-                        peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
-                        peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-green-600">
+          <select [(ngModel)]="student.gender"
+                  class="block py-2.5 px-0 w-full border-0 border-b-2 border-gray-300 focus:border-blue-600 peer">
+            <option>Female</option>
+            <option>Male</option>
+            <option>Other Gender</option>
+          </select>
+          <label 
+              class="absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
+              peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
+                peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-green-600">
             Gender *
           </label>
         </div>
@@ -80,12 +86,12 @@
       <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
       <form (ngSubmit)="submitForm()" class="space-y-6">
 
-        <!-- Email -->
+        <!-- Full Name -->
         <div class="relative z-0 w-full group">
           <input type="email" name="email" [(ngModel)]="student.fullname" required
                 class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" " readonly/>
-          <label for="email"
+          <label for="fullname"
                 class="absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
                         peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
                         peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-blue-600">
@@ -93,12 +99,12 @@
           </label>
         </div>
 
-        <!-- Full Name -->
+        <!-- Passport -->
         <div class="relative z-0 w-full group">
           <input type="text" name="name" [(ngModel)]="student.passport" required
                 class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-green-600 peer"
                 placeholder=" " readonly/>
-          <label for="name"
+          <label for="passport"
                 class="absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
                         peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
                         peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-green-600">
@@ -106,12 +112,12 @@
           </label>
         </div>
 
-        <!-- About Me -->
+        <!-- country -->
         <div class="relative z-0 w-full group">
           <input type="text" name="about" [(ngModel)]="student.country" required
                 class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-green-600 peer"
                 placeholder=" " readonly/>
-          <label for="lastname"
+          <label for="country"
                 class="absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
                 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
                 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-green-600">
@@ -119,12 +125,12 @@
           </label>
         </div>
 
-        <!-- Address -->
+        <!-- DOB -->
         <div class="relative z-0 w-full group">
           <input type="text" name="address" [(ngModel)]="student.dateofbirth"
                 class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-green-600 peer"
                 placeholder=" " readonly/>
-          <label for="address"
+          <label for="dateofbirth"
                 class="absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
                         peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0
                         peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-green-600">
