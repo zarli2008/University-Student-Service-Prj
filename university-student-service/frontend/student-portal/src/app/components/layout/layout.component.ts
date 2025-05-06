@@ -1,14 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { User } from '../../model/interface/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
-  selector: 'app-left-sidebar',
+  selector: 'app-layout',
   imports: [RouterModule, CommonModule],
-  templateUrl: './left-sidebar.component.html',
-  styleUrl: './left-sidebar.component.scss',
+  templateUrl: './layout.component.html',
+  styleUrl: './layout.component.scss',
 })
-export class LeftSidebarComponent {
+export class LayoutComponent {
+  user: User;
   isLeftSidebarCollapsed = input.required<boolean>();
   changeIsLeftSidebarCollapsed = output<boolean>();
   items = [
@@ -45,5 +48,9 @@ export class LeftSidebarComponent {
 
   closeSidenav(): void {
     this.changeIsLeftSidebarCollapsed.emit(true);
+  }
+
+  constructor(private userService: UserService) {
+    this.user = this.userService.getUser();
   }
 }
