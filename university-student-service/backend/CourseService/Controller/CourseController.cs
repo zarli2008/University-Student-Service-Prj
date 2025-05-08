@@ -64,12 +64,12 @@ namespace CourseService.Controller
 
             try
             {
-                using var response = await _s3Client.GetObjectAsync(request);
-                var stream = response.ResponseStream;
+                var response = await _s3Client.GetObjectAsync(request);
+                //var stream = response.ResponseStream;
                 var contentType = response.Headers.ContentType ?? "application/octet-stream";
                 var fileName = Path.GetFileName(key);
 
-                return File(stream, contentType, fileName);
+                return File(response.ResponseStream, contentType, fileName);
             }
             catch (AmazonS3Exception ex)
             {
