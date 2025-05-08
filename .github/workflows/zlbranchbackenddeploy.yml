@@ -1,3 +1,6 @@
+on:
+  workflow_dispatch:  # to enables the "Run workflow" button
+
 name: Deploy .NET App to Windows EC2
 
 on:
