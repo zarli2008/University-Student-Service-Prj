@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'backend/**'
+      - 'backend/CourseService/**'
 
 jobs:
   deploy-backend:
@@ -30,7 +30,7 @@ jobs:
     - name: Publish and Zip Application
       run: |
         dotnet publish university-student-service/backend/CourseService/CourseService.csproj -c Release -o ./published
-        Compress-Archive -Path ./published* -DestinationPath ./backend.zip
+        Compress-Archive -Path ./published/* -DestinationPath ./backend.zip
 
     # Step 4: Upload the Zip File to S3
     - name: Upload to S3
@@ -45,15 +45,29 @@ jobs:
     - name: Deploy via WinRM
       run: |
         $ErrorActionPreference = "Stop"
-        $session = New-PSSession -ComputerName ${{ secrets.EC2_HOST }} -Credential (New-Object PSCredential(${{ secrets.EC2_USERNAME }}, (ConvertTo-SecureString ${{ secrets.EC2_PASSWORD }} -AsPlainText -Force)))
+        Set-Item -Path WSMan:\localhost\Client\AllowUnencrypted -Value $true
+        # Add EC2 host to TrustedHosts
+        Set-Item WSMan:\localhost\Client\TrustedHosts -Value "${{ secrets.EC2_HOST }}" -Force
+        $securePassword = ConvertTo-SecureString "${{ secrets.EC2_PASSWORD }}" -AsPlainText -Force
+        $credential = New-Object System.Management.Automation.PSCredential("${{ secrets.EC2_USERNAME }}", $securePassword)
+        $session = New-PSSession -ComputerName "${{ secrets.EC2_HOST }}" -Credential $credential -Port 5985 -Authentication Basic
         Invoke-Command -Session $session -ScriptBlock {
+          # Stop the Windows service via NSSM
+          & "C:\nssm\nssm.exe" stop CourseService
+
+          # Kill the app
+          Get-Process -Name "dotnet" -ErrorAction SilentlyContinue | Stop-Process -Force
+          
+          # Clean up existing files
+          Remove-Item -Recurse -Force C:\test\app\* -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force C:\temp\backend.zip -ErrorAction SilentlyContinue
+
           # Download the backend.zip from S3
           Invoke-WebRequest -Uri "https://ussfrontbucket.s3.ap-southeast-2.amazonaws.com/backend.zip" -OutFile "C:\temp\backend.zip"
           # Extract the zip file
           Expand-Archive -Path "C:\temp\backend.zip" -DestinationPath "C:\test\app" -Force
-          # Stop the currently running service (if any)
-          Get-Process -Name "CourseService" -ErrorAction SilentlyContinue | Stop-Process -Force
+          
           # Start the application
-          Start-Process "dotnet" -ArgumentList "C:\test\app\CourseService.dll --urls http://0.0.0.0:5000" -WindowStyle Hidden
+          Start-Process "dotnet" -ArgumentList "CourseService.dll --urls http://0.0.0.0:5000" -WorkingDirectory "C:\test\app" -WindowStyle Hidden
         }
         Remove-PSSession -Session $session
