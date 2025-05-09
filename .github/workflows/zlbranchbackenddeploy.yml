@@ -1,6 +1,7 @@
 name: Auto Deploy .NET App to Windows Server 2019 EC2
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
