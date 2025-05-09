@@ -20,8 +20,7 @@ builder.Services.AddCors(options =>
 });
 
 // Configure AWS S3 client with credentials from appsettings.json
-var configuration = builder.Configuration;
-var awsConfig = configuration.GetSection("AWS").Get<AWSConfig>();
+var awsConfig = builder.Configuration.GetSection("AWS").Get<AWSConfig>();
 var credentials = new BasicAWSCredentials(awsConfig.AccessKey, awsConfig.SecretKey);
 var s3Config = new AmazonS3Config
 {
@@ -38,10 +37,11 @@ builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonS3>();
+builder.Configuration.AddEnvironmentVariables();
 
 // Configure AWS RDS connection
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
