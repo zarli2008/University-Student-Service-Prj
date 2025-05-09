@@ -26,8 +26,8 @@ jobs:
     # Step 3: Publish and Zip the .NET Application
     - name: Publish and Zip Application
       run: |
-        dotnet publish backend -c Release -o ./published
-        Compress-Archive -Path ./published/* -DestinationPath ./backend.zip
+        dotnet publish backend/CourseService/CourseService.csproj -c Release -o ./published
+        Compress-Archive -Path ./published* -DestinationPath ./backend.zip
 
     # Step 4: Upload the Zip File to S3
     - name: Upload to S3
