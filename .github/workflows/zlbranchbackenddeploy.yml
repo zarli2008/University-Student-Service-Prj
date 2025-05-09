@@ -26,7 +26,7 @@ jobs:
       run: Compress-Archive -Path ./published/* -DestinationPath ./backend.zip
 
     - name: Upload zip to EC2 via WinRM
-      uses: Malinskiy/action-winrm@v1.2.2
+      uses: Malinskiy/action-winrm@v1.1.0
       with:
         host: ${{ secrets.EC2_HOST }}
         user: ${{ secrets.EC2_USERNAME }}
@@ -37,7 +37,7 @@ jobs:
           Copy-Item $source -Destination $dest -Force
 
     - name: Unzip and run .NET app on EC2
-      uses: Malinskiy/action-winrm@v1.2.2
+      uses: Malinskiy/action-winrm@v1.1.0
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
