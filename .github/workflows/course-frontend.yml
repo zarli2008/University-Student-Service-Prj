@@ -1,0 +1,40 @@
+
+name: Deploy Angular to S3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+
+    - name: Install dependencies
+      working-directory: ./frontend/student-portal/
+      run: npm install
+
+    - name: Build Angular app
+      working-directory: ./frontend/student-portal/
+      run: ng build --configuration production
+
+    - name: Deploy to S3
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ap-southeast-2  
+      run: |
+        aws s3 sync ./frontend/dist/ s3://your-bucket-name/ --delete
