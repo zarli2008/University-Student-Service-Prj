@@ -1,51 +1,36 @@
 name: Deploy .NET App to Windows EC2
 
 on:
-  workflow_dispatch:  # to enables the "Run workflow" button
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - 'backend/**' 
+      - 'backend/**'
+
 jobs:
   deploy-backend:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+    - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
 
-    - name: Publish .NET App
-      run: dotnet publish -c Release -o published
+    - name: Publish and Zip
+      run: |
+        dotnet publish backend -c Release -o ./published
+        Compress-Archive -Path ./published/* -DestinationPath ./backend.zip
 
-    - name: Compress published folder to zip
-      run: Compress-Archive -Path ./published/* -DestinationPath ./backend.zip
-
-    - name: Upload zip to EC2 via WinRM
-      uses: Malinskiy/action-winrm@v1.1.0
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        user: ${{ secrets.EC2_USERNAME }}
-        password: ${{ secrets.EC2_PASSWORD }}
-        command: |
-          $source = "$env:GITHUB_WORKSPACE\backend.zip"
-          $dest = "C:\temp\backend.zip"
-          Copy-Item $source -Destination $dest -Force
-
-    - name: Unzip and run .NET app on EC2
+    - name: Upload and Deploy via WinRM
       uses: Malinskiy/action-winrm@v1.1.0
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
         password: ${{ secrets.EC2_PASSWORD }}
         command: |
-          Expand-Archive -Path C:\temp\backend.zip -DestinationPath C:\test\app -Force
-
-          # Kill any existing dotnet process that runs CourseService
+          Copy-Item "$env:GITHUB_WORKSPACE\backend.zip" -Destination "C:\temp\backend.zip" -Force
+          Expand-Archive -Path "C:\temp\backend.zip" -DestinationPath "C:\test\app" -Force
           Get-Process -Name "CourseService" -ErrorAction SilentlyContinue | Stop-Process -Force
-
           Start-Process "dotnet" -ArgumentList "C:\test\app\CourseService.dll --urls http://0.0.0.0:5000" -WindowStyle Hidden
