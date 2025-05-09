@@ -13,5 +13,5 @@ export const routes: Routes = [
   { path: 'enrolment-info', component: EnrolmentInfoComponent },
   { path: 'student-documents', component: StudentDocumentsComponent },
   { path: 'course-info', component: CourseInfoComponent },
-  { path: 'course/:id', component: CourseDetailComponent,data: { renderMode: 'direct' } }
+  { path: 'course/:id', component: CourseDetailComponent }
 ];

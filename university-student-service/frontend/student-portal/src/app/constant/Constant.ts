@@ -16,4 +16,4 @@ export const COURSE_INFO_TABLE_HEADERS = [
   'Points'
 ];
 
-export const COURSE_API_URL : string = 'https://localhost:44313/api/Course';
+export const COURSE_API_URL : string = 'http://ec2-3-27-42-134.ap-southeast-2.compute.amazonaws.com:5000/api/course';
