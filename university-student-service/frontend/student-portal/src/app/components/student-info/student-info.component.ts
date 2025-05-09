@@ -32,7 +32,7 @@ export class StudentInfoComponent implements OnInit {
   }
 
   submitForm() {
-    alert('Changes saved for ' + this.student.name);
+    //alert('Changes saved for ' + this.student.name);
     this.studentService.updateStudent(this.student);
   }
 
