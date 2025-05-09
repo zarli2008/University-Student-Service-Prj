@@ -22,32 +22,29 @@ jobs:
     - name: Publish .NET App
       run: dotnet publish -c Release -o published
 
-    - name: Copy files to EC2 via WinRM
-      uses: mcmilk/pswinrm-action@v1
+    - name: Compress published folder to zip
+      run: Compress-Archive -Path ./published/* -DestinationPath ./backend.zip
+
+    - name: Upload zip to EC2 via WinRM
+      uses: Malinskiy/action-winrm@v1.2.2
       with:
         host: ${{ secrets.EC2_HOST }}
         user: ${{ secrets.EC2_USERNAME }}
         password: ${{ secrets.EC2_PASSWORD }}
         command: |
-          mkdir C:\test\app -Force
-          Remove-Item -Recurse -Force C:\test\app\* -ErrorAction SilentlyContinue
+          $source = "$env:GITHUB_WORKSPACE\backend.zip"
+          $dest = "C:\temp\backend.zip"
+          Copy-Item $source -Destination $dest -Force
 
-    - name: Transfer published app to EC2
-      uses: garygrossgarten/github-action-scp@release
+    - name: Unzip and run .NET app on EC2
+      uses: Malinskiy/action-winrm@v1.2.2
       with:
-        local: ./published/
-        remote: C:/test/app/
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
         password: ${{ secrets.EC2_PASSWORD }}
-
-    - name: Start app on EC2
-      uses: mcmilk/pswinrm-action@v1
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        user: ${{ secrets.EC2_USERNAME }}
-        password: ${{ secrets.EC2_PASSWORD }}
         command: |
+          Expand-Archive -Path C:\temp\backend.zip -DestinationPath C:\test\app -Force
+
           # Kill any existing dotnet process that runs CourseService
           Get-Process -Name "CourseService" -ErrorAction SilentlyContinue | Stop-Process -Force
 
