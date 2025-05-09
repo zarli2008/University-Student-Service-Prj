@@ -24,13 +24,14 @@ jobs:
         Compress-Archive -Path ./published/* -DestinationPath ./backend.zip
 
     - name: Upload and Deploy via WinRM
-      uses: Malinskiy/action-winrm@v1.1.0
+      uses: chrislennon/winrm-action@v1.0.0
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
         password: ${{ secrets.EC2_PASSWORD }}
+        port: 5985
         command: |
-          Copy-Item "$env:GITHUB_WORKSPACE\backend.zip" -Destination "C:\temp\backend.zip" -Force
+          Invoke-WebRequest -Uri "https://your-bucket.s3.amazonaws.com/backend.zip" -OutFile "C:\temp\backend.zip"
           Expand-Archive -Path "C:\temp\backend.zip" -DestinationPath "C:\test\app" -Force
           Get-Process -Name "CourseService" -ErrorAction SilentlyContinue | Stop-Process -Force
           Start-Process "dotnet" -ArgumentList "C:\test\app\CourseService.dll --urls http://0.0.0.0:5000" -WindowStyle Hidden
