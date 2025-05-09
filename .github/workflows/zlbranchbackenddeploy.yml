@@ -45,6 +45,7 @@ jobs:
     - name: Deploy via WinRM
       run: |
         $ErrorActionPreference = "Stop"
+        Set-Item -Path WSMan:\localhost\Client\AllowUnencrypted -Value $true
         # Add EC2 host to TrustedHosts
         Set-Item WSMan:\localhost\Client\TrustedHosts -Value "${{ secrets.EC2_HOST }}" -Force
         $securePassword = ConvertTo-SecureString "${{ secrets.EC2_PASSWORD }}" -AsPlainText -Force
