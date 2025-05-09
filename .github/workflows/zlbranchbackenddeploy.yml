@@ -1,54 +1,59 @@
-name: Deploy .NET App to Windows EC2
+name: Auto Deploy .NET App to Windows Server 2019 EC2
 
 on:
-  workflow_dispatch:  # to enables the "Run workflow" button
+  workflow_dispatch:
   push:
-    branches: [ZL-work]
+    branches:
+      - main
     paths:
-      - 'backend/**' 
+      - 'backend/**'
+
 jobs:
   deploy-backend:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
+    # Step 1: Checkout the repository
+    - name: Checkout Repository
       uses: actions/checkout@v3
 
+    # Step 2: Set up .NET
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
 
-    - name: Publish .NET App
-      run: dotnet publish -c Release -o published
+    - name: Restore NuGet packages
+      run: dotnet restore university-student-service/backend/CourseService/CourseService.csproj
+      
+    # Step 3: Publish and Zip the .NET Application
+    - name: Publish and Zip Application
+      run: |
+        dotnet publish university-student-service/backend/CourseService/CourseService.csproj -c Release -o ./published
+        Compress-Archive -Path ./published* -DestinationPath ./backend.zip
 
-    - name: Copy files to EC2 via WinRM
-      uses: mcmilk/pswinrm-action@v1
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        user: ${{ secrets.EC2_USERNAME }}
-        password: ${{ secrets.EC2_PASSWORD }}
-        command: |
-          mkdir C:\test\app -Force
-          Remove-Item -Recurse -Force C:\test\app\* -ErrorAction SilentlyContinue
+    # Step 4: Upload the Zip File to S3
+    - name: Upload to S3
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ap-southeast-2 # Adjust the region as needed
+      run: |
+        aws s3 cp ./backend.zip s3://ussfrontbucket/backend.zip
 
-    - name: Transfer published app to EC2
-      uses: garygrossgarten/github-action-scp@release
-      with:
-        local: ./published/
-        remote: C:/test/app/
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        password: ${{ secrets.EC2_PASSWORD }}
-
-    - name: Start app on EC2
-      uses: mcmilk/pswinrm-action@v1
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        user: ${{ secrets.EC2_USERNAME }}
-        password: ${{ secrets.EC2_PASSWORD }}
-        command: |
-          # Kill any existing dotnet process that runs CourseService
+    # Step 5: Deploy to Windows Server 2019 EC2 via WinRM
+    - name: Deploy via WinRM
+      run: |
+        $ErrorActionPreference = "Stop"
+        $session = New-PSSession -ComputerName ${{ secrets.EC2_HOST }} -Credential (New-Object PSCredential(${{ secrets.EC2_USERNAME }}, (ConvertTo-SecureString ${{ secrets.EC2_PASSWORD }} -AsPlainText -Force)))
+        Invoke-Command -Session $session -ScriptBlock {
+          # Download the backend.zip from S3
+          Invoke-WebRequest -Uri "https://ussfrontbucket.s3.ap-southeast-2.amazonaws.com/backend.zip" -OutFile "C:\temp\backend.zip"
+          # Extract the zip file
+          Expand-Archive -Path "C:\temp\backend.zip" -DestinationPath "C:\test\app" -Force
+          # Stop the currently running service (if any)
           Get-Process -Name "CourseService" -ErrorAction SilentlyContinue | Stop-Process -Force
-
+          # Start the application
           Start-Process "dotnet" -ArgumentList "C:\test\app\CourseService.dll --urls http://0.0.0.0:5000" -WindowStyle Hidden
+        }
+        Remove-PSSession -Session $session
