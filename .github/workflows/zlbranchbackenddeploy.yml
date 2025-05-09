@@ -52,6 +52,9 @@ jobs:
         $credential = New-Object System.Management.Automation.PSCredential("${{ secrets.EC2_USERNAME }}", $securePassword)
         $session = New-PSSession -ComputerName "${{ secrets.EC2_HOST }}" -Credential $credential -Port 5985 -Authentication Basic
         Invoke-Command -Session $session -ScriptBlock {
+          # Stop the Windows service via NSSM
+          & "C:\nssm\nssm.exe" stop CourseService
+
           # Kill the app
           Get-Process -Name "dotnet" -ErrorAction SilentlyContinue | Stop-Process -Force
           
