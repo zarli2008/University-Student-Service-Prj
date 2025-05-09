@@ -45,9 +45,11 @@ jobs:
     - name: Deploy via WinRM
       run: |
         $ErrorActionPreference = "Stop"
+        # Add EC2 host to TrustedHosts
+        Set-Item WSMan:\localhost\Client\TrustedHosts -Value "${{ secrets.EC2_HOST }}" -Force
         $securePassword = ConvertTo-SecureString "${{ secrets.EC2_PASSWORD }}" -AsPlainText -Force
         $credential = New-Object System.Management.Automation.PSCredential("${{ secrets.EC2_USERNAME }}", $securePassword)
-        $session = New-PSSession -ComputerName "${{ secrets.EC2_HOST }}" -Credential $credential
+        $session = New-PSSession -ComputerName "${{ secrets.EC2_HOST }}" -Credential $credential -UseSSL
         Invoke-Command -Session $session -ScriptBlock {
           # Download the backend.zip from S3
           Invoke-WebRequest -Uri "https://ussfrontbucket.s3.ap-southeast-2.amazonaws.com/backend.zip" -OutFile "C:\temp\backend.zip"
