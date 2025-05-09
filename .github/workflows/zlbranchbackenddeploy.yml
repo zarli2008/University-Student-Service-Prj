@@ -59,6 +59,6 @@ jobs:
           # Stop the currently running service (if any)
           Get-Process -Name "CourseService" -ErrorAction SilentlyContinue | Stop-Process -Force
           # Start the application
-          Start-Process "dotnet" -ArgumentList "C:\test\app\CourseService.dll --urls http://0.0.0.0:5000" -WindowStyle Hidden
+          Start-Process "dotnet" -ArgumentList "CourseService.dll --urls http://0.0.0.0:5000" -WorkingDirectory "C:\test\app" -WindowStyle Hidden
         }
         Remove-PSSession -Session $session
