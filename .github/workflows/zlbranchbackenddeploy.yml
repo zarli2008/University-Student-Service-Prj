@@ -23,6 +23,9 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
+    - name: Restore NuGet packages
+      run: dotnet restore university-student-service/backend/CourseService/CourseService.csproj
+      
     # Step 3: Publish and Zip the .NET Application
     - name: Publish and Zip Application
       run: |
