@@ -3,7 +3,7 @@ name: Deploy .NET App to Windows EC2
 on:
   workflow_dispatch:  # to enables the "Run workflow" button
   push:
-    branches: [ZL-work]
+    branches: [main]
     paths:
       - 'backend/**' 
 jobs:
