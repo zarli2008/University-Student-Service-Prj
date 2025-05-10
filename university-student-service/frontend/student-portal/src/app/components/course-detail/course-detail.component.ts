@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
 export class CourseDetailComponent {
   tableHeaders = COURSE_INFO_TABLE_HEADERS;
   qualification?: iQualificationInfo;
-  downloadurl = `${COURSE_API_URL}/download?key=`;
+  downloadurl = `${COURSE_API_URL}/download?key=courseinfo-documents/`;
   
   constructor(
     private route: ActivatedRoute,
