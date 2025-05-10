@@ -39,7 +39,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: ap-southeast-2 # Adjust the region as needed
       run: |
-        aws s3 cp ./backend.zip s3://ussfrontbucket/backend.zip
+        aws s3 cp ./backend.zip s3://uss-storage-bucket/published/backend.zip
 
     # Step 5: Deploy to Windows Server 2019 EC2 via WinRM
     - name: Deploy via WinRM
@@ -63,7 +63,7 @@ jobs:
           Remove-Item -Recurse -Force C:\temp\backend.zip -ErrorAction SilentlyContinue
 
           # Download the backend.zip from S3
-          Invoke-WebRequest -Uri "https://ussfrontbucket.s3.ap-southeast-2.amazonaws.com/backend.zip" -OutFile "C:\temp\backend.zip"
+          Invoke-WebRequest -Uri "https://uss-storage-bucket.s3.ap-southeast-2.amazonaws.com/published/backend.zip" -OutFile "C:\temp\backend.zip"
           # Extract the zip file
           Expand-Archive -Path "C:\temp\backend.zip" -DestinationPath "C:\test\app" -Force
           
