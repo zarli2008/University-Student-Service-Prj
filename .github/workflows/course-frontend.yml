@@ -11,7 +11,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: university-student-service/frontend/student-portal
+        
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -25,11 +28,9 @@ jobs:
       run: npm install -g @angular/cli
 
     - name: Install dependencies
-      working-directory: ./university-student-service/frontend/student-portal/
       run: npm install
 
     - name: Build Angular app
-      working-directory: ./university-student-service/frontend/student-portal/
       run: ng build --configuration production
 
     - name: Deploy to S3
@@ -38,4 +39,4 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: ap-southeast-2  
       run: |
-        aws s3 sync ./frontend/dist/ s3://ussfrontbucket/frontendApp/ --delete
+        aws s3 sync dist/student-portal/ s3://ussfrontbucket/frontendApp/ --delete
