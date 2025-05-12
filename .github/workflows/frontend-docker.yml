@@ -1,6 +1,7 @@
 name: Build and Deploy Angular SSR to ECR
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
 
