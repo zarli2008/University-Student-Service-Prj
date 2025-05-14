@@ -1,30 +1,24 @@
-# Stage 1: Build the app using Node
+# Stage 1: Build
 FROM node:18 AS builder
 
 WORKDIR /app
 
-# Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy source code and build the Angular + SSR app
 COPY . .
 
-# Build the browser and server bundles
+# Build both browser and server bundles
 RUN npm run build:ssr
 
-# Stage 2: Run the SSR server
-FROM node:18-alpine
+# Stage 2: Serve the SSR app
+FROM node:18-slim
 
 WORKDIR /app
 
-# Copy built app from previous stage
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/package.json /app/package.json
 
-# Optional: Expose port (default SSR runs on 4000)
-EXPOSE 4000
-
-# Start the server (dist/server/main.js is the SSR entry point)
-CMD ["node", "dist/server/main.js"]
+# Run the SSR server (adjust app name if different)
+CMD ["node", "dist/student-portal/server/server.mjs"]
