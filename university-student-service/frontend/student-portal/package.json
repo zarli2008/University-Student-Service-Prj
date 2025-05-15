@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "build:ssr": "ng build && ng run student-portal:server",
-    "serve:ssr:student-portal": "node dist/student-portal/server/server.mjs"
+    "serve:ssr": "node dist/student-portal/server/main.js"
   },
   "private": true,
   "dependencies": {
@@ -45,6 +45,4 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.7.2"
   }
-
 }
-
