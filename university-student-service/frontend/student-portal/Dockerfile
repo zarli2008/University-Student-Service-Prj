@@ -21,4 +21,4 @@ COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/package.json /app/package.json
 
 # Run the SSR server (adjust app name if different)
-CMD ["node", "dist/student-portal/server/server.mjs"]
+CMD ["node", "dist/student-portal/server/main.js"]
