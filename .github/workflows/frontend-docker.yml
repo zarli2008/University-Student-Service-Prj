@@ -41,7 +41,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ecs/task-def.json
+          task-definition: university-student-service/frontend/student-portal/ecs/task-def.json
           container-name: uss-frontend
           image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
