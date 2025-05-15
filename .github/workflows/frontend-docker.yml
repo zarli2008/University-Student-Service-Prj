@@ -3,7 +3,10 @@ name: Build and Deploy Angular SSR to ECR
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches:
+      - main
+    paths:
+      - 'university-student-service/frontend/**'
 
 jobs:
   deploy:
@@ -29,7 +32,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REPOSITORY:$IMAGE_TAG -f university-student-service/frontend/student-portal/Dockerfile ./university-student-service/frontend
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG -f university-student-service/frontend/student-portal/Dockerfile ./university-student-service/frontend/student-portal
           docker tag $ECR_REPOSITORY:$IMAGE_TAG ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
           docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
 
