@@ -1,0 +1,24 @@
+		{
+			"requiresCompatibilities": [
+				"FARGATE"
+			],
+			"family": "uss-frontend-task",
+			"containerDefinitions": [
+				{
+					"name": "uss-frontend",
+					"image": "PLACEHOLDER_IMAGE",
+					"essential": true,
+					"portMappings": [
+						{
+						  "containerPort": 4000,
+						  "protocol": "tcp"
+						}
+					]
+				}
+			],
+			"volumes": [],
+			"networkMode": "awsvpc",
+			"memory": "3 GB",
+			"cpu": "1 vCPU",
+			"executionRoleArn": "arn:aws:iam::062365602724:user/USS_access:role/ecsTaskExecutionRole"
+		}
