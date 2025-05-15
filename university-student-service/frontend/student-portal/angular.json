@@ -56,8 +56,7 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all",
-              "baseHref": "/"
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
@@ -78,6 +77,26 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/student-portal/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "sourceMap": false,
+              "optimization": true
+            },
+            "development": {
+              "sourceMap": true,
+              "optimization": false
+            }
+          },
+          "defaultConfiguration": "production"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
